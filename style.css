@@ -1,0 +1,837 @@
+/* ===== CSS 변수 ===== */
+:root {
+  --color-primary:     #4A90D9;
+  --color-primary-dark:#2c6fad;
+  --color-bg:          #f0f4f8;
+  --color-surface:     #ffffff;
+  --color-text:        #1a202c;
+  --color-text-muted:  #718096;
+  --color-error:       #e53e3e;
+  --color-error-bg:    #fff5f5;
+  --color-border:      #e2e8f0;
+
+  --radius-sm:  8px;
+  --radius-md:  16px;
+  --radius-lg:  24px;
+
+  --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.08);
+  --shadow-btn:  0 2px 8px rgba(74, 144, 217, 0.35);
+
+  --font-base:   'Segoe UI', 'Apple SD Gothic Neo', sans-serif;
+
+  --transition: 0.2s ease;
+
+  --accent: var(--color-primary);
+}
+
+/* ===== 리셋 & 베이스 ===== */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-base);
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  min-height: 100dvh;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* ===== 레이아웃 ===== */
+#app {
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 0 16px 32px;
+}
+
+@media (min-width: 768px) {
+  #app {
+    max-width: 430px;
+  }
+}
+
+/* ===== 헤더 ===== */
+.app-header {
+  position: relative;
+  text-align: center;
+  padding: 32px 0 20px;
+}
+
+.theme-toggle-btn {
+  position: absolute;
+  top: 32px;
+  right: 0;
+  width: 40px;
+  height: 40px;
+  border: 1.5px solid var(--color-border);
+  border-radius: 50%;
+  background: var(--color-surface);
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background var(--transition), border-color var(--transition);
+}
+
+.theme-toggle-btn:active {
+  background: var(--color-bg);
+}
+
+.logo {
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: 4px;
+  color: var(--color-primary);
+}
+
+.tagline {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  margin-top: 4px;
+}
+
+/* ===== 검색 섹션 ===== */
+.search-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.search-form {
+  display: flex;
+  gap: 8px;
+}
+
+.search-input {
+  flex: 1;
+  height: 48px;
+  padding: 0 16px;
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  font-size: 1rem;
+  font-family: var(--font-base);
+  background: var(--color-surface);
+  color: var(--color-text);
+  outline: none;
+  transition: border-color var(--transition);
+}
+
+.search-input:focus {
+  border-color: var(--color-primary);
+}
+
+.search-btn {
+  height: 48px;
+  padding: 0 20px;
+  background: var(--color-primary);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background var(--transition);
+}
+
+.search-btn:active {
+  background: var(--color-primary-dark);
+}
+
+.location-btn {
+  height: 44px;
+  background: transparent;
+  border: 1.5px solid var(--color-primary);
+  border-radius: var(--radius-sm);
+  color: var(--color-primary);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background var(--transition), color var(--transition);
+}
+
+.location-btn:active {
+  background: var(--color-primary);
+  color: #fff;
+}
+
+/* ===== 에러 메시지 ===== */
+.error-message {
+  background: var(--color-error-bg);
+  color: var(--color-error);
+  border: 1px solid #feb2b2;
+  border-radius: var(--radius-sm);
+  padding: 12px 16px;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin-bottom: 16px;
+}
+
+/* ===== 로딩 ===== */
+.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 40px 0;
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+}
+
+.spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid var(--color-border);
+  border-top-color: var(--color-primary);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ===== 날씨 카드 ===== */
+.weather-card {
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  padding: 28px 24px;
+  box-shadow: var(--shadow-card);
+  margin-bottom: 16px;
+}
+
+.weather-location {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+
+.refresh-btn {
+  margin-left: auto;
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  padding: 4px 6px;
+  border-radius: var(--radius-sm);
+  transition: color var(--transition), transform 0.3s;
+  line-height: 1;
+}
+.refresh-btn:active {
+  transform: rotate(180deg);
+  color: var(--color-primary);
+}
+
+.weather-updated {
+  font-size: 0.72rem;
+  color: var(--color-text-muted);
+  margin-bottom: 12px;
+}
+
+.city-name {
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+
+.country-code {
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+}
+
+.weather-main {
+  text-align: center;
+  padding: 16px 0;
+}
+
+.weather-status {
+  font-size: 1rem;
+  color: var(--color-text-muted);
+  margin-bottom: 8px;
+  text-transform: capitalize;
+}
+
+.temp-display {
+  display: inline-flex;
+  align-items: flex-start;
+  line-height: 1;
+}
+
+.temp-value {
+  font-size: 5rem;
+  font-weight: 700;
+  letter-spacing: -2px;
+  color: var(--color-primary);
+}
+
+.temp-unit {
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin-top: 10px;
+  color: var(--color-primary);
+}
+
+.feels-label {
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+  margin-top: 8px;
+}
+
+.feels-value {
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+/* ===== 날씨 세부 정보 ===== */
+.weather-details {
+  display: flex;
+  justify-content: space-around;
+  border-top: 1px solid var(--color-border);
+  margin-top: 20px;
+  padding-top: 20px;
+}
+
+.detail-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.detail-label {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.detail-value {
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+
+.detail-unit {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+}
+
+/* ===== 시간대별 예보 스크롤 ===== */
+.forecast-section {
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  padding: 20px 24px;
+  box-shadow: var(--shadow-card);
+  margin-bottom: 16px;
+}
+
+.forecast-title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 14px;
+}
+
+.forecast-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.forecast-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.forecast-cards {
+  display: flex;
+  gap: 8px;
+  width: max-content;
+}
+
+.forecast-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  min-width: 60px;
+  padding: 10px 8px;
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-bg);
+}
+
+.forecast-card.peak-hours {
+  border-color: var(--accent);
+  background: var(--color-surface);
+}
+
+.forecast-time {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+}
+
+.forecast-card.peak-hours .forecast-time {
+  color: var(--accent);
+}
+
+.forecast-emoji {
+  font-size: 1.4rem;
+  line-height: 1;
+}
+
+.forecast-temp {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+/* ===== 성별 선택 ===== */
+.gender-selector {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.gender-btn {
+  flex: 1;
+  height: 38px;
+  border: 1.5px solid var(--color-border);
+  border-radius: 20px;
+  background: var(--color-surface);
+  color: var(--color-text-muted);
+  font-size: 0.88rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background var(--transition), color var(--transition), border-color var(--transition);
+}
+
+.gender-btn.active {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: #fff;
+}
+
+.gender-btn:not(.active):active {
+  background: var(--color-bg);
+}
+
+/* ===== TPO 선택 ===== */
+.tpo-selector {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.tpo-btn {
+  flex: 1;
+  height: 36px;
+  border: 1.5px solid var(--color-border);
+  border-radius: 20px;
+  background: var(--color-surface);
+  color: var(--color-text-muted);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background var(--transition), color var(--transition), border-color var(--transition);
+}
+
+.tpo-btn.active {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: #fff;
+}
+
+.tpo-btn:not(.active):active {
+  background: var(--color-bg);
+}
+
+/* ===== 코디 추천 카드 ===== */
+.outfit-section {
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  box-shadow: var(--shadow-card);
+  margin-bottom: 16px;
+}
+
+.outfit-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.outfit-header h2 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.temp-stage-badge {
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 20px;
+  background: #ebf4ff;
+  color: var(--color-primary);
+}
+
+/* ===== 코디 이미지 그리드 ===== */
+.outfit-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.outfit-grid.three-col {
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+.outfit-item-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 10px 6px 12px;
+  background: var(--color-bg);
+}
+
+.outfit-item-img-wrap {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  position: relative;
+}
+
+.outfit-item-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.outfit-item-skeleton {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, #e8edf2 25%, #d1d9e0 50%, #e8edf2 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.outfit-item-skeleton.no-image {
+  animation: none;
+  background: var(--color-border);
+}
+
+.outfit-item-skeleton.no-image::after {
+  content: attr(data-emoji);
+  font-size: 2.2rem;
+  opacity: 0.45;
+}
+
+.outfit-item-category {
+  font-size: 0.7rem;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 600;
+}
+
+.outfit-item-name {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--color-text);
+  text-align: center;
+  line-height: 1.3;
+}
+
+/* ===== 레이어드·경고 알림 ===== */
+.outfit-notices {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+
+.outfit-notice {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  padding: 8px 12px;
+  background: var(--color-bg);
+  border-radius: var(--radius-sm);
+  line-height: 1.4;
+}
+
+/* ===== 피드백 버튼 ===== */
+.feedback-section {
+  border-top: 1px solid var(--color-border);
+  margin-top: 20px;
+  padding-top: 18px;
+}
+
+.feedback-question {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+.feedback-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.feedback-btn {
+  flex: 1;
+  height: 44px;
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background var(--transition), border-color var(--transition), color var(--transition);
+  white-space: nowrap;
+}
+
+.feedback-btn:not(:disabled):active {
+  background: var(--color-bg);
+}
+
+.feedback-btn.selected {
+  background: #ebf4ff;
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.feedback-btn:disabled {
+  cursor: default;
+  opacity: 0.6;
+}
+
+.feedback-done-msg {
+  margin-top: 10px;
+  font-size: 0.8rem;
+  color: var(--color-primary);
+  text-align: center;
+}
+
+/* ===== 피드백 이력 ===== */
+.feedback-history-section {
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  box-shadow: var(--shadow-card);
+}
+
+.feedback-history-section h2 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-text);
+  margin-bottom: 16px;
+}
+
+.feedback-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.feedback-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  background: var(--color-bg);
+  border-radius: var(--radius-sm);
+  font-size: 0.9rem;
+}
+
+.feedback-item-date {
+  color: var(--color-text-muted);
+  font-size: 0.8rem;
+  flex: 1;
+}
+
+.feedback-item-temp {
+  font-weight: 600;
+  color: var(--color-primary);
+  min-width: 52px;
+  text-align: right;
+}
+
+.feedback-item-stage {
+  color: var(--color-text-muted);
+  font-size: 0.8rem;
+  flex: 1;
+  text-align: center;
+}
+
+.feedback-item-emoji {
+  font-size: 1.2rem;
+  min-width: 28px;
+  text-align: right;
+}
+
+.feedback-empty {
+  text-align: center;
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+  padding: 20px 0;
+}
+
+/* ===== 오프라인 배너 ===== */
+.offline-banner {
+  background: #744210;
+  color: #fefcbf;
+  text-align: center;
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 10px 16px;
+  letter-spacing: 0.2px;
+}
+
+/* ===== 에러 토스트 ===== */
+.error-toast {
+  position: fixed;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: calc(430px - 32px);
+  width: calc(100% - 32px);
+  background: #1a202c;
+  color: #f7fafc;
+  border-radius: var(--radius-md);
+  padding: 14px 18px;
+  font-size: 0.88rem;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+  animation: toast-in 0.2s ease;
+}
+
+@keyframes toast-in {
+  from { opacity: 0; transform: translateX(-50%) translateY(8px); }
+  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+.retry-btn {
+  margin-left: auto;
+  flex-shrink: 0;
+  height: 30px;
+  padding: 0 12px;
+  background: var(--color-primary);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+/* ===== 스켈레톤 로딩 ===== */
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position:  200% 0; }
+}
+
+.skeleton {
+  background: linear-gradient(90deg, #e8edf2 25%, #d1d9e0 50%, #e8edf2 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 8px;
+}
+
+.skeleton-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.skeleton-card {
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  padding: 28px 24px;
+  box-shadow: var(--shadow-card);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.skeleton-header {
+  height: 20px;
+  width: 40%;
+}
+
+.skeleton-temp {
+  height: 72px;
+  width: 50%;
+  align-self: center;
+}
+
+.skeleton-body {
+  height: 14px;
+  width: 75%;
+}
+
+.skeleton-row {
+  height: 18px;
+  width: 70%;
+}
+
+/* ===== 다크 테마 ===== */
+[data-theme="dark"] {
+  --color-bg:         #1a202c;
+  --color-surface:    #2d3748;
+  --color-text:       #f7fafc;
+  --color-text-muted: #a0aec0;
+  --color-border:     #4a5568;
+  --color-error-bg:   #2d1515;
+}
+
+[data-theme="dark"] .skeleton {
+  background: linear-gradient(90deg, #2d3748 25%, #4a5568 50%, #2d3748 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+[data-theme="dark"] .outfit-item-skeleton {
+  background: linear-gradient(90deg, #2d3748 25%, #4a5568 50%, #2d3748 75%);
+  background-size: 200% 100%;
+}
+
+[data-theme="dark"] .outfit-item-skeleton.no-image {
+  animation: none;
+  background: var(--color-border);
+}
+
+/* ===== 유틸리티 ===== */
+.hidden {
+  display: none !important;
+}

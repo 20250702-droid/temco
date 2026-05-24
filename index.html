@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <meta name="theme-color" content="#4A90D9" />
+  <title>TEMCO — 템코</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="app">
+    <header class="app-header">
+      <h1 class="logo">TEMCO</h1>
+      <p class="tagline">날씨 기반 옷차림 추천</p>
+      <button id="theme-toggle" class="theme-toggle-btn" aria-label="테마 전환">🌙</button>
+    </header>
+
+    <!-- 오프라인 배너 -->
+    <div id="offline-banner" class="offline-banner hidden" role="status">
+      📡 오프라인 모드 — 캐시된 데이터를 표시합니다
+    </div>
+
+    <!-- 에러 토스트 -->
+    <div id="error-toast" class="error-toast hidden" role="alert">
+      <span id="error-toast-msg"></span>
+      <button id="retry-btn" class="retry-btn hidden">다시 시도</button>
+    </div>
+
+    <main class="main-content">
+      <!-- 도시 검색 폼 -->
+      <section class="search-section">
+        <form id="city-form" class="search-form">
+          <input
+            type="text"
+            id="city-input"
+            class="search-input"
+            placeholder="도시명 검색 (예: 서울, 부산, Seoul)"
+            autocomplete="off"
+          />
+          <button type="submit" class="search-btn">검색</button>
+        </form>
+        <button id="location-btn" class="location-btn">
+          📍 내 위치 사용
+        </button>
+      </section>
+
+      <!-- 성별 선택 -->
+      <div class="gender-selector" role="group" aria-label="성별 선택">
+        <button class="gender-btn active" data-gender="male">남성</button>
+        <button class="gender-btn" data-gender="female">여성</button>
+      </div>
+
+      <!-- TPO 선택 -->
+      <div class="tpo-selector" role="group" aria-label="상황 선택">
+        <button class="tpo-btn active" data-tpo="casual">일상</button>
+        <button class="tpo-btn" data-tpo="work">출근</button>
+        <button class="tpo-btn" data-tpo="date">데이트</button>
+        <button class="tpo-btn" data-tpo="exercise">운동</button>
+      </div>
+
+      <!-- 스켈레톤 로딩 -->
+      <div id="skeleton-section" class="skeleton-section hidden">
+        <div class="skeleton-card">
+          <div class="skeleton skeleton-header"></div>
+          <div class="skeleton skeleton-temp"></div>
+          <div class="skeleton skeleton-body"></div>
+          <div class="skeleton skeleton-body" style="width:55%"></div>
+        </div>
+        <div class="skeleton-card">
+          <div class="skeleton skeleton-header"></div>
+          <div class="skeleton skeleton-row"></div>
+          <div class="skeleton skeleton-row" style="width:60%"></div>
+          <div class="skeleton skeleton-row" style="width:50%"></div>
+        </div>
+      </div>
+
+      <!-- 날씨 카드 -->
+      <section id="weather-card" class="weather-card hidden">
+        <div class="weather-location">
+          <span id="city-name" class="city-name"></span>
+          <span id="country-code" class="country-code"></span>
+          <button id="refresh-btn" class="refresh-btn" aria-label="날씨 새로고침" title="새로고침">↻</button>
+        </div>
+        <p id="weather-updated" class="weather-updated"></p>
+
+        <div class="weather-main">
+          <p id="weather-status" class="weather-status"></p>
+          <div class="temp-display">
+            <span id="temp" class="temp-value"></span>
+            <span class="temp-unit">°C</span>
+          </div>
+          <p class="feels-label">
+            체감 <span id="feels-like" class="feels-value"></span>°C
+          </p>
+        </div>
+
+        <div class="weather-details">
+          <div class="detail-item">
+            <span class="detail-label">습도</span>
+            <span id="humidity" class="detail-value"></span>
+            <span class="detail-unit">%</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">풍속</span>
+            <span id="wind-speed" class="detail-value"></span>
+            <span class="detail-unit">m/s</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- 시간대별 예보 스크롤 -->
+      <section id="forecast-section" class="forecast-section hidden">
+        <h3 class="forecast-title">오늘의 시간대별 날씨</h3>
+        <div class="forecast-scroll">
+          <div id="forecast-cards" class="forecast-cards"></div>
+        </div>
+      </section>
+
+      <!-- 코디 추천 카드 -->
+      <section id="outfit-section" class="outfit-section hidden">
+        <div class="outfit-header">
+          <h2>오늘의 코디 추천</h2>
+          <span id="temp-stage-badge" class="temp-stage-badge"></span>
+        </div>
+
+        <div id="outfit-grid" class="outfit-grid">
+          <!-- 상의 -->
+          <div class="outfit-item-card">
+            <div class="outfit-item-img-wrap">
+              <div id="outfit-top-skeleton" class="outfit-item-skeleton" data-emoji="👕"></div>
+              <img id="outfit-top-img" class="outfit-item-img hidden" alt="상의" />
+            </div>
+            <span class="outfit-item-category">상의</span>
+            <span id="outfit-top" class="outfit-item-name"></span>
+          </div>
+          <!-- 하의 -->
+          <div class="outfit-item-card">
+            <div class="outfit-item-img-wrap">
+              <div id="outfit-bottom-skeleton" class="outfit-item-skeleton" data-emoji="👖"></div>
+              <img id="outfit-bottom-img" class="outfit-item-img hidden" alt="하의" />
+            </div>
+            <span class="outfit-item-category">하의</span>
+            <span id="outfit-bottom" class="outfit-item-name"></span>
+          </div>
+          <!-- 아우터 -->
+          <div id="outer-row" class="outfit-item-card hidden">
+            <div class="outfit-item-img-wrap">
+              <div id="outfit-outer-skeleton" class="outfit-item-skeleton" data-emoji="🧥"></div>
+              <img id="outfit-outer-img" class="outfit-item-img hidden" alt="아우터" />
+            </div>
+            <span class="outfit-item-category">아우터</span>
+            <span id="outfit-outer" class="outfit-item-name"></span>
+          </div>
+        </div>
+
+        <!-- 레이어드·경고 알림 -->
+        <div id="outfit-notices" class="outfit-notices"></div>
+
+        <!-- 피드백 버튼 -->
+        <div class="feedback-section">
+          <p class="feedback-question">오늘 추천이 어땠나요?</p>
+          <div class="feedback-buttons">
+            <button class="feedback-btn" data-value="hot">🔥 더웠어요</button>
+            <button class="feedback-btn" data-value="ok">✅ 적당했어요</button>
+            <button class="feedback-btn" data-value="cold">🥶 추웠어요</button>
+          </div>
+          <p id="feedback-done-msg" class="feedback-done-msg hidden">✓ 오늘 피드백이 반영되었습니다.</p>
+        </div>
+      </section>
+
+      <!-- 피드백 이력 -->
+      <section id="feedback-history" class="feedback-history-section hidden">
+        <h2>최근 피드백 기록</h2>
+        <ul id="feedback-list" class="feedback-list"></ul>
+      </section>
+    </main>
+  </div>
+
+  <script src="storage.js"></script>
+  <script src="outfit.js"></script>
+  <script src="weather.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
